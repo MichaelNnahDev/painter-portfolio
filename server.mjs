@@ -1,7 +1,13 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { Resend } from 'resend';
+
+// ESM path resolution
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -12,6 +18,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 app.use(cors());
 app.use(express.json());
 
+// 1. API Route
 app.post('/api/inquire', async (req, res) => {
   const { name, email, subject, message } = req.body;
 
@@ -63,6 +70,14 @@ app.post('/api/inquire', async (req, res) => {
   }
 });
 
+// 2. Serve built static frontend files from Vite
+app.use(express.static(path.join(__dirname, 'dist')));
+
+// 3. SPA Fallback: send index.html for any unhandled GET request
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
 app.listen(PORT, () => {
-  console.log(`API Server running at http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
