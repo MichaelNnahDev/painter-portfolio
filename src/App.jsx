@@ -137,7 +137,7 @@ export default function App() {
     setFeedback({ type: null, text: '' });
 
     try {
-      const response = await fetch('http://localhost:4000/api/inquire', {
+      const response = await fetch('/api/inquire', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
