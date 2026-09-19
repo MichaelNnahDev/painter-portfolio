@@ -73,8 +73,8 @@ app.post('/api/inquire', async (req, res) => {
 // 2. Serve built static frontend files from Vite
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// 3. SPA Fallback: send index.html for any unhandled GET request
-app.get('*', (req, res) => {
+// ✅ Correct (works in Express 4 and Express 5):
+app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
